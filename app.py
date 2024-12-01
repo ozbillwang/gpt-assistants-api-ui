@@ -310,18 +310,14 @@ def main():
     if multi_agents:
         assistants_json = json.loads(multi_agents)
         assistants_object = {f'{obj["title"]}': obj for obj in assistants_json}
-        selected_assistant = st.sidebar.selectbox(
-            "Select an assistant profile?",
-            list(assistants_object.keys()),
-            index=None,
-            placeholder="Select an assistant profile...",
-            on_change=reset_chat,  # Call the reset function on change
-        )
-        if selected_assistant:
-            load_chat_screen(
-                assistants_object[selected_assistant]["id"],
-                assistants_object[selected_assistant]["title"],
-            )
+
+        st.sidebar.header("Select an assistant profile")
+
+        for assistant in assistants_object.values():
+            if st.sidebar.button(assistant["title"]):
+                # Trigger the chat loading when a button is clicked
+                load_chat_screen(assistant["id"], assistant["title"])
+
     elif single_agent_id:
         load_chat_screen(single_agent_id, single_agent_title)
     else:
